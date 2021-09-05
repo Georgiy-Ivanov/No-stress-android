@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegistrationActivity">
+
+    <TextView
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registration"
+        android:textAlignment="center"
+        android:layout_marginTop="30sp"
+        android:textSize="34sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/email_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top"
+        android:layout_marginLeft="30sp"
+        android:layout_marginTop="30sp"
+        android:layout_marginRight="30sp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Email"
+        android:textAlignment="viewStart" />
+
+    <EditText
+        android:id="@+id/pass_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email_field"
+        android:layout_marginLeft="30sp"
+        android:layout_marginTop="30sp"
+        android:layout_marginRight="30sp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Password" />
+
+    <EditText
+        android:id="@+id/pass_field2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pass_field"
+        android:layout_marginLeft="30sp"
+        android:layout_marginTop="30sp"
+        android:layout_marginRight="30sp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Repeat password" />
+
+    <Button
+        android:id="@+id/reg_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registration"
+        android:layout_below="@+id/pass_field2"
+        android:layout_marginLeft="100sp"
+        android:layout_marginTop="50sp"
+        android:layout_marginRight="100sp"
+    />
+
+</RelativeLayout>
