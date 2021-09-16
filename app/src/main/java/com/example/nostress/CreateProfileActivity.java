@@ -1,10 +1,12 @@
 package com.example.nostress;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,11 +24,11 @@ public class CreateProfileActivity extends AppCompatActivity {
     String email;
     SimpleDateFormat dateFormat;
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_profile_activity);
-
         intent = getIntent();
         email = intent.getStringExtra("email");
         calendar = Calendar.getInstance();
@@ -44,30 +46,30 @@ public class CreateProfileActivity extends AppCompatActivity {
     }
 
     private void buttonPressed(){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                    try {
-                        mConnect.openConnection();
-                        String date_now = dateFormat.format(calendar.getTime());
-                        String userName = name.getText().toString();
-                        String userPhone = formatNumber(phone.getText().toString());
-                        String sndMsg = "create;"+ email + ";" + date_now + ";" + userName + ";" + userPhone;
-                        mConnect.sendData(sndMsg);
-                        mConnect.closeConnection();
-
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String date_now = dateFormat.format(calendar.getTime());
+                    String userName = name.getText().toString();
+                    String userPhone = formatNumber(phone.getText().toString());
+                    String sndMsg = "create;"+ email + ";" + date_now + ";" + userName + ";" + userPhone;
+                    if (getData(sndMsg).equals("1")){
                         Intent intent = new Intent(CreateProfileActivity.this, MainActivity.class);
-                        intent.putExtra("request", sndMsg);
+                        intent.putExtra("email", email);
                         startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        Toast toast = Toast.makeText(CreateProfileActivity.this, "Вы ввели неверные данные", Toast.LENGTH_LONG);
+                        toast.show();
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            }).start();
+            }
+        }).start();
     }
 
-
+    //форматирование номера телефона
     private static String formatNumber(String phone) { //форматирование номера телефона
         if ((phone.replaceAll("[^0-9]", "")).length() == 11) {
             String clean = phone.replaceAll("[^0-9]", "");
@@ -83,6 +85,19 @@ public class CreateProfileActivity extends AppCompatActivity {
             return result;
         }
         return "+7 (000) 000 00 00";
+    }
+
+    public String getData(String msg){
+        String message = "";
+        try {
+            mConnect.openConnection();
+            mConnect.sendData(msg);
+            message = mConnect.getData();
+            mConnect.closeConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return message;
     }
 
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -14,7 +15,6 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private EditText passwordRepeat;
-    private Button btn;
 
 
     @Override
@@ -25,7 +25,7 @@ public class RegistrationActivity extends AppCompatActivity {
         email = findViewById(R.id.email_field);
         password = findViewById(R.id.pass_field);
         passwordRepeat = findViewById(R.id.pass_field2);
-        btn = findViewById(R.id.reg_button);
+        Button btn = findViewById(R.id.reg_button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -33,7 +33,8 @@ public class RegistrationActivity extends AppCompatActivity {
                     if ((password.getText().toString()).equals(passwordRepeat.getText().toString())) {
                         onOpenClick();
                     } else {
-                        System.out.println("Пароли не совпадают");
+                        Toast toast = Toast.makeText(RegistrationActivity.this, "Пароли не совпадают", Toast.LENGTH_LONG);
+                        toast.show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -51,12 +52,13 @@ public class RegistrationActivity extends AppCompatActivity {
                         String userEmail = email.getText().toString();
                         String userPass = password.getText().toString();
                         String sndMsg = "reg;"+ userEmail + ";" + userPass;
-                        sendData(sndMsg);
-                        String isRegistered = mConnect.getData();
-                        if (isRegistered.equals("1")) {
+                        if (getData(sndMsg).equals("1")) {
                             Intent intent = new Intent(RegistrationActivity.this, CreateProfileActivity.class);
                             intent.putExtra("email", userEmail);
                             startActivity(intent);
+                        } else {
+                            Toast toast = Toast.makeText(RegistrationActivity.this, "Такой email уже используется", Toast.LENGTH_LONG);
+                            toast.show();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -65,13 +67,17 @@ public class RegistrationActivity extends AppCompatActivity {
         }).start();
     }
 
-    public void sendData(String msg){
+    public String getData(String msg){
+        String message = "";
         try {
             mConnect.openConnection();
             mConnect.sendData(msg);
+            message = mConnect.getData();
+            mConnect.closeConnection();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return message;
     }
 }
 
